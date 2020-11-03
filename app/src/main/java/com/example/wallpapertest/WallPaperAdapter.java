@@ -1,6 +1,7 @@
 package com.example.wallpapertest;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,16 @@ public class WallPaperAdapter extends RecyclerView.Adapter<WallPaperAdapter.View
         }
         View view = LayoutInflater.from(mcontext).inflate(R.layout.wallpaper_item,parent,false);
         final ViewHolder holder = new ViewHolder(view);
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = holder.getAdapterPosition();
+                WallPaper wallPaper = mwallpaperList.get(position);
+                Intent intent = new Intent(mcontext,WallPaperActivity.class);
+                intent.putExtra(WallPaperActivity.WALLPAPER_IMAGE,wallPaper.getImageId());
+                mcontext.startActivity(intent);
+            }
+        });
         return holder;
     }
 
