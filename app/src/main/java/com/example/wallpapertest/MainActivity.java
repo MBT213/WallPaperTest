@@ -131,12 +131,9 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Log.d("-------", "2333 ");
                 OkHttpClient okHttpClient = new OkHttpClient();
                 Request request = new Request.Builder().url(url).build();
-                Log.d("-------", "123456 ");
                 Call call = okHttpClient.newCall(request);
-                Log.d("-------", "3322 ");
                 call.enqueue(new Callback() {
                     @Override
                     public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -145,10 +142,8 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        Log.d("-------", "1111 ");
                         Log.d("-------", "onResponse: "+response);
                         ResultModel model = JSON.parseObject(response.body().string(),ResultModel.class);
-                        Log.d("-------", "2 ");
                         List<WallModel>  datas= model.getRes().getVertical();
                         List<WallPaper> wallPapers2 = new ArrayList<>();
                         //WallPaper[] wallPapers = new WallPaper[datas.size()];
