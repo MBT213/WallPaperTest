@@ -57,20 +57,20 @@ public class DownloadTask extends AsyncTask<String,Integer,Integer> {
             long downloadLength = 0;
             String downUrl = param[0];
             String[] str = downUrl.split("/");
-            String fileName = str[3].concat(".jpg");
-            Log.d("filename",fileName);
-            String directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();
+            String fileName = str[3].concat(".jpg");//图片文件名
+            //Log.d("filename",fileName);
+            String directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getPath();//存放地址
             file = new File(directory+"/"+fileName);
             if (file.exists()){
                 downloadLength = file.length();
                 //Toast.makeText(DownloadTask.this,"失败",Toast.LENGTH_SHORT);
             }
             long contentLength = getContentLength(downUrl);
-            Log.d("length", String.valueOf(contentLength));
+            //Log.d("length", String.valueOf(contentLength));
             if (contentLength == 0){
                 return TYPE_FAILED;
             }else if (contentLength == downloadLength){
-                return TYPE_SUCCESS;
+                return TYPE_SUCCESS;//文件大小和已下载的大小相同说明已经存在
             }
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
@@ -79,12 +79,11 @@ public class DownloadTask extends AsyncTask<String,Integer,Integer> {
             if (response != null){
                 is = response.body().byteStream();
                 saveFile = new RandomAccessFile(file,"rw");
-                //saveFile.seek(downloadLength);
                 byte[] b = new byte[1024];
                 int total = 0;
                 int len;
                 while ((len = is.read(b)) != -1){
-                    Log.d("LENGTH", ""+len);
+                    //Log.d("LENGTH", ""+len);
                     total += len;
                     saveFile.write(b,0,len);
                     int progress = (int) ((total + downloadLength) * 100 / contentLength);
@@ -110,6 +109,9 @@ public class DownloadTask extends AsyncTask<String,Integer,Integer> {
         return TYPE_FAILED;
     }
 
+    /*
+    * 获取图片的大小
+    * */
     private long getContentLength(String downloadUrl) throws IOException {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()

@@ -91,6 +91,5 @@ public class DownloadService extends Service {
                 Toast.makeText(DownloadService.this,"下载中...",Toast.LENGTH_SHORT).show();
             }
         }
-        //public void setWallPaper()
     }
 }

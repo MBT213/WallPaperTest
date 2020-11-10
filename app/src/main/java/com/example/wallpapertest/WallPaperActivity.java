@@ -67,9 +67,10 @@ public class WallPaperActivity extends AppCompatActivity {
                 }
             }
         }
+        /*-------------------------------------------------------------------*/
         Intent intent = getIntent();
         final String wallpaperImage = intent.getStringExtra(WALLPAPER_IMAGE);
-        Log.d("imgdirecory",wallpaperImage);
+        //Log.d("imgdirecory",wallpaperImage);
         ImageView imageView = (ImageView)findViewById(R.id.wallpaper_Image);
         Button download = (Button)findViewById(R.id.download_button);
         Button dummy = (Button)findViewById(R.id.dummy_button);
@@ -79,16 +80,17 @@ public class WallPaperActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(WallPaperActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(WallPaperActivity.this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
         }
-
+        /*-----------------------------------------------------------------------------------------------*/
         Toolbar toolbar =(Toolbar)findViewById(R.id.toolbar);
         CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout)findViewById(R.id.collapsingtoolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);//隐藏标题
         ActionBar actionBar = getSupportActionBar();
         if (actionBar!=null){
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         Glide.with(this).load(wallpaperImage).into(imageView);
-
+        /****---------------------------------------------------------------***/
         download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,6 +114,9 @@ public class WallPaperActivity extends AppCompatActivity {
         });
     }
 
+    /*
+    * 设置图片为壁纸
+    * */
     public void setWallpaperImage(String url) throws IOException {
 
         OkHttpClient okHttpClient=new OkHttpClient();
@@ -120,6 +125,7 @@ public class WallPaperActivity extends AppCompatActivity {
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
+                Toast.makeText(WallPaperActivity.this,"设置失败",Toast.LENGTH_SHORT).show();
                 Log.d("update_picture","fail");
             }
 
@@ -146,7 +152,7 @@ public class WallPaperActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
-            case android.R.id.home:
+            case android.R.id.home://返回键
                 finish();
                 return true;
         }
