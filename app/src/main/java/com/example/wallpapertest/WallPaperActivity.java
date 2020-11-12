@@ -10,9 +10,12 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.app.Activity;
 import android.content.ComponentName;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
@@ -27,6 +30,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.like.LikeButton;
+import com.like.OnLikeListener;
 
 import java.io.IOException;
 
@@ -38,6 +43,9 @@ import okhttp3.Response;
 
 public class WallPaperActivity extends AppCompatActivity {
     public  static final String WALLPAPER_IMAGE = "wallpaper_image";
+    private String username;
+    private String favourite;
+    private MyDatabaseHelper myDatabaseHelper;
 
     private DownloadService.DownloadBinder downloadBinder;
     private ServiceConnection connection = new ServiceConnection() {
@@ -55,7 +63,7 @@ public class WallPaperActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wall_paper);
-
+        myDatabaseHelper = new MyDatabaseHelper(this,"WallPaper.db",null,1);
         if (Build.VERSION.SDK_INT >= 23) {
             int REQUEST_CODE_CONTACT = 101;
             String[] permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -70,6 +78,8 @@ public class WallPaperActivity extends AppCompatActivity {
         /*-------------------------------------------------------------------*/
         Intent intent = getIntent();
         final String wallpaperImage = intent.getStringExtra(WALLPAPER_IMAGE);
+        favourite = wallpaperImage;
+        username = intent.getStringExtra("USER_NAME");
         //Log.d("imgdirecory",wallpaperImage);
         ImageView imageView = (ImageView)findViewById(R.id.wallpaper_Image);
         Button download = (Button)findViewById(R.id.download_button);
@@ -89,6 +99,26 @@ public class WallPaperActivity extends AppCompatActivity {
         if (actionBar!=null){
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        //-------------------------------------------------------------------------------------------------
+        LikeButton likeButton = (LikeButton)findViewById(R.id.star_button);
+        if (checkWallpaperisfavourite(username,favourite)){
+            likeButton.setLiked(true);
+        }else {
+            likeButton.setLiked(false);
+        }
+        likeButton.setOnLikeListener(new OnLikeListener() {
+            @Override
+            public void liked(LikeButton likeButton) {
+                addfavourite(username,favourite);
+                Toast.makeText(WallPaperActivity.this,"收藏",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void unLiked(LikeButton likeButton) {
+                deletefavourite(username,favourite);
+                Toast.makeText(WallPaperActivity.this,"取消收藏",Toast.LENGTH_SHORT).show();
+            }
+        });
         Glide.with(this).load(wallpaperImage).into(imageView);
         /****---------------------------------------------------------------***/
         download.setOnClickListener(new View.OnClickListener() {
@@ -112,6 +142,39 @@ public class WallPaperActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void addfavourite(String musername,String mfavourite){
+        myDatabaseHelper.getWritableDatabase();
+        SQLiteDatabase db = myDatabaseHelper.getWritableDatabase();
+        String Query = "Select id from user where username =? ";
+        Cursor cursor = db.rawQuery(Query,new String[]{musername});
+        cursor.moveToFirst();
+        int id = cursor.getInt(cursor.getColumnIndex("id"));
+        ContentValues values = new ContentValues();
+        values.put("id",id);
+        values.put("username",musername);
+        values.put("favourite",mfavourite);
+        db.insert("favourite_wallpaper",null,values);
+    }
+
+    public void deletefavourite(String musername,String mfavourite){
+        myDatabaseHelper.getWritableDatabase();
+        SQLiteDatabase db = myDatabaseHelper.getWritableDatabase();
+        String Query = "Delete from favourite_wallpaper where username =? and favourite =?";
+        db.execSQL(Query,new String[]{musername,mfavourite});
+    }
+
+    public boolean checkWallpaperisfavourite(String musername,String mfavourite){
+        SQLiteDatabase db=myDatabaseHelper.getWritableDatabase();
+        String Query = "Select * from favourite_wallpaper where username =? and favourite =? ";
+        Cursor cursor = db.rawQuery(Query,new String[] { musername,mfavourite });
+        if (cursor.getCount()>0){
+            cursor.close();
+            return  true;
+        }
+        cursor.close();
+        return false;
     }
 
     /*

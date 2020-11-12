@@ -20,10 +20,12 @@ public class WallPaperAdapter extends RecyclerView.Adapter<WallPaperAdapter.View
     private Context mcontext;
     private List<WallPaper> mwallpaperList;
     private List<Integer> mHeight;
+    private String username;
 
-    public WallPaperAdapter(List<WallPaper> wallPaperList,List<Integer> Height){
+    public WallPaperAdapter(List<WallPaper> wallPaperList,List<Integer> Height,String username){
         mwallpaperList = wallPaperList;
         mHeight = Height;
+        this.username = username;
     }
 
     @NonNull
@@ -40,6 +42,7 @@ public class WallPaperAdapter extends RecyclerView.Adapter<WallPaperAdapter.View
                 int position = holder.getAdapterPosition();
                 WallPaper wallPaper = mwallpaperList.get(position);
                 Intent intent = new Intent(mcontext,WallPaperActivity.class);
+                intent.putExtra("USER_NAME",username);
                 intent.putExtra(WallPaperActivity.WALLPAPER_IMAGE,wallPaper.getImageId());
                 mcontext.startActivity(intent);
             }

@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private List<Integer> mHeight;
     private SwipeRefreshLayout swipeRefreshLayout;
     private WallPaperAdapter adapter;
+    String UserName;
 
     String url = "http://service.picasso.adesk.com/v1/lightwp/vertical?adult=0&first=1&limit=30&order=hot&skip=30";//图片json数据源
 
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
             imageArray=array;
             Log.d("directory", String.valueOf(imageArray));
             getRandomHeight();
-            adapter = new WallPaperAdapter(imageArray,mHeight);
+            adapter = new WallPaperAdapter(imageArray,mHeight,UserName);
             mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(3,StaggeredGridLayoutManager.VERTICAL));//展示3列
             mRecyclerView.setAdapter(adapter);
 
@@ -95,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = getIntent();
             String username = intent.getStringExtra("USER_NAME");
             String email = intent.getStringExtra("EMAIL");
+            UserName = username;
             name.setText(username);
             useremail.setText(email);
         }
