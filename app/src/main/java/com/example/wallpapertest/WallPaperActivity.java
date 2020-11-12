@@ -41,7 +41,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class WallPaperActivity extends AppCompatActivity {
+public class WallPaperActivity extends BaseActivity {
     public  static final String WALLPAPER_IMAGE = "wallpaper_image";
     private String username;
     private String favourite;

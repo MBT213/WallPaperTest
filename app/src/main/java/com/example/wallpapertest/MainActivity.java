@@ -39,7 +39,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private DrawerLayout mDrawerLayout;
     private RecyclerView mRecyclerView;
@@ -109,7 +109,14 @@ public class MainActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                mDrawerLayout.closeDrawers();
+                switch (item.getItemId()){
+                    case R.id.nav_task:
+                        loginout();
+                        break;
+                    default:
+                        mDrawerLayout.closeDrawers();
+                }
+                //mDrawerLayout.closeDrawers();
                 return true;
             }
         });
@@ -216,5 +223,10 @@ public class MainActivity extends AppCompatActivity {
             default:
         }
         return true;
+    }
+
+    public void loginout(){
+        Intent intent = new Intent("com.example.wallpapertest.loginout");
+        sendBroadcast(intent);
     }
 }

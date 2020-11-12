@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class Register extends AppCompatActivity {
+public class Register extends BaseActivity {
 
     private MyDatabaseHelper myDatabaseHelper;
     @Override

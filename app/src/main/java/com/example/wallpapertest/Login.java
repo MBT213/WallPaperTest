@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class Login extends AppCompatActivity {
+public class Login extends BaseActivity {
 
     private MyDatabaseHelper myDatabaseHelper;
 
