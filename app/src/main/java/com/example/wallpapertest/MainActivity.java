@@ -48,6 +48,7 @@ public class MainActivity extends BaseActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
     private WallPaperAdapter adapter;
     String UserName;
+    String Email;
 
     String url = "http://service.picasso.adesk.com/v1/lightwp/vertical?adult=0&first=1&limit=30&order=hot&skip=30";//图片json数据源
 
@@ -97,6 +98,7 @@ public class MainActivity extends BaseActivity {
             String username = intent.getStringExtra("USER_NAME");
             String email = intent.getStringExtra("EMAIL");
             UserName = username;
+            Email = email;
             name.setText(username);
             useremail.setText(email);
         }
@@ -112,6 +114,9 @@ public class MainActivity extends BaseActivity {
                 switch (item.getItemId()){
                     case R.id.nav_task:
                         loginout();
+                        break;
+                    case R.id.nav_favourite:
+                        ToFavourite(UserName,Email);
                         break;
                     default:
                         mDrawerLayout.closeDrawers();
@@ -225,8 +230,18 @@ public class MainActivity extends BaseActivity {
         return true;
     }
 
+    /*
+    * 退出登录
+    * */
     public void loginout(){
         Intent intent = new Intent("com.example.wallpapertest.loginout");
         sendBroadcast(intent);
+    }
+
+    public void ToFavourite(String userName,String email){
+        Intent intent = new Intent(MainActivity.this,FavouriteActivity.class);
+        intent.putExtra("UserName",userName);
+        intent.putExtra("Email",email);
+        startActivity(intent);
     }
 }

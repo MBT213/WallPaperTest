@@ -33,13 +33,17 @@ public class Register extends BaseActivity {
                 final String usename = usernameEdit.getText().toString();
                 final String password = passwordEdit.getText().toString();
                 final String useremail = useremailEdit.getText().toString();
-                if (CheckIsDataAlreadyInDBorNot(usename)){
-                    Toast.makeText(Register.this,"该用户名已被注册",Toast.LENGTH_SHORT);
-                }else if (register_information(usename,password,useremail)){
-                    //Log.d("information",usename+","+password+","+useremail);
-                    Toast.makeText(Register.this,"注册成功",Toast.LENGTH_SHORT);
-                    Intent intent = new Intent(Register.this,Login.class);
-                    startActivity(intent);
+                if (usename == null || password == null || useremail == null) {
+                    Toast.makeText(Register.this,"用户名密码邮箱不能为空",Toast.LENGTH_SHORT).show();
+                }else {
+                    if (CheckIsDataAlreadyInDBorNot(usename)){
+                        Toast.makeText(Register.this,"该用户名已被注册",Toast.LENGTH_SHORT);
+                    }else if (register_information(usename,password,useremail)){
+                        //Log.d("information",usename+","+password+","+useremail);
+                        Toast.makeText(Register.this,"注册成功",Toast.LENGTH_SHORT);
+                        Intent intent = new Intent(Register.this,Login.class);
+                        startActivity(intent);
+                    }
                 }
             }
         });
