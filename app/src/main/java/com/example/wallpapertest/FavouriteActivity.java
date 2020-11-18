@@ -73,8 +73,14 @@ public class FavouriteActivity extends BaseActivity {
                     case R.id.nav_task:
                         loginout();
                         break;
+                    case R.id.nav_friend:
+                        ToCategoryActivity(UserName,Email);
+                        break;
                     case R.id.nav_favourite:
                         ToFavourite(UserName,Email);
+                        break;
+                    case R.id.nav_call:
+                        ToMainActivity(UserName,Email);
                         break;
                     default:
                         mDrawerLayout.closeDrawers();
@@ -139,6 +145,22 @@ public class FavouriteActivity extends BaseActivity {
         startActivity(intent);
     }
 
+    /*跳转到首页推荐页面*/
+    public void ToMainActivity(String userName,String email){
+        Intent intent = new Intent(FavouriteActivity.this,MainActivity.class);
+        intent.putExtra("USER_NAME",userName);
+        intent.putExtra("EMAIL",email);
+        startActivity(intent);
+    }
+
+    /*跳转到分类页面*/
+    public void ToCategoryActivity(String userName,String email){
+        Intent intent = new Intent(FavouriteActivity.this,CategoryActivity.class);
+        intent.putExtra("USER_NAME",userName);
+        intent.putExtra("EMAIL",email);
+        startActivity(intent);
+    }
+
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.toolbar,menu);
         return true;
@@ -163,4 +185,5 @@ public class FavouriteActivity extends BaseActivity {
         }
         return true;
     }
+
 }

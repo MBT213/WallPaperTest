@@ -115,9 +115,14 @@ public class MainActivity extends BaseActivity {
                     case R.id.nav_task:
                         loginout();
                         break;
+                    case R.id.nav_friend:
+                        ToCategoryActivity(UserName,Email);
+                        break;
                     case R.id.nav_favourite:
                         ToFavourite(UserName,Email);
                         break;
+                    case R.id.nav_call:
+                        ToMainActivity(UserName,Email);
                     default:
                         mDrawerLayout.closeDrawers();
                 }
@@ -238,10 +243,27 @@ public class MainActivity extends BaseActivity {
         sendBroadcast(intent);
     }
 
+    /*跳转到收藏界面*/
     public void ToFavourite(String userName,String email){
         Intent intent = new Intent(MainActivity.this,FavouriteActivity.class);
         intent.putExtra("UserName",userName);
         intent.putExtra("Email",email);
+        startActivity(intent);
+    }
+
+    /*跳转到首页推荐页面*/
+    public void ToMainActivity(String userName,String email){
+        Intent intent = new Intent(MainActivity.this,MainActivity.class);
+        intent.putExtra("USER_NAME",userName);
+        intent.putExtra("EMAIL",email);
+        startActivity(intent);
+    }
+
+    /*跳转到分类页面*/
+    public void ToCategoryActivity(String userName,String email){
+        Intent intent = new Intent(MainActivity.this,CategoryActivity.class);
+        intent.putExtra("USER_NAME",userName);
+        intent.putExtra("EMAIL",email);
         startActivity(intent);
     }
 }
